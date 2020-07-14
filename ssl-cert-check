@@ -143,8 +143,6 @@ send_mail() {
     SUBJECT="${3}"
     MSG="${4}"
 
-    cat $REPORTHEADER $REPORTFILE > $REPORTFILE
-
     case "${MAILMODE}" in
         "mail")
             if [ "${REPORT}" = "TRUE" ]; then
