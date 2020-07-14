@@ -35,6 +35,9 @@ CERTTYPE="pem"
 # Don't create a report by default
 REPORT="FALSE"
 
+# The default alert state is false
+ALERT="FALSE"
+
 # Define temporary files for SSMTP Emailheader when SSMTP is used
 MAILHEADER=/tmp/mailheader
 
@@ -573,6 +576,8 @@ check_file_status() {
     CERTDIFF=$(date_diff "${NOWJULIAN}" "${CERTJULIAN}")
 
     if [ "${CERTDIFF}" -lt 0 ]; then
+
+        $ALERT="TRUE"
         if [ "${ALARM}" = "TRUE" ] && [ "${REPORT}" = "FALSE" ]; then
             send_mail "${SENDER}" "${ADMIN}" "Certificate for ${HOST} \"(CN: ${COMMONNAME})\" has expired!" \
                 "The SSL certificate for ${HOST} \"(CN: ${COMMONNAME})\" has expired!"
@@ -585,6 +590,8 @@ check_file_status() {
         RETCODE_LOCAL=2
 
     elif [ "${CERTDIFF}" -lt "${WARNDAYS}" ]; then
+
+        $ALERT="TRUE"
         if [ "${ALARM}" = "TRUE" ] && [ "${REPORT}" = "FALSE" ]; then
             send_mail "${SENDER}" "${ADMIN}" "Certificate for ${HOST} \"(CN: ${COMMONNAME})\" will expire in ${CERTDIFF}-days or less" \
                 "The SSL certificate for ${HOST} \"(CN: ${COMMONNAME})\" will expire on ${CERTDATE}"
