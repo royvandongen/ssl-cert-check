@@ -38,6 +38,9 @@ REPORT="FALSE"
 # Define temporary files for SSMTP Emailheader when SSMTP is used
 OUTPUTFILE=/tmp/outputfile
 
+# Define a temporary reportheader file when reports are made
+REPORTHEADER=/tmp/reportheader
+
 # Define temporary report file when reports are made
 REPORTFILE=/tmp/reportfile
 
@@ -112,10 +115,16 @@ cleanup() {
       echo "Normally we delete a file now"
     fi
 
+    if [ -f "${REPORTHEADER}" ]; then
+      #rm -f "${REPORTHEADER}"
+      echo "Normally we delete a file now"
+    fi
+
     if [ -f "${REPORTFILE}" ]; then
       #rm -f "${REPORTFILE}"
       echo "Normally we delete a file now"
     fi
+
 }
 
 
@@ -170,11 +179,12 @@ send_mail() {
 
 
             if [ "${REPORT}" = "TRUE" ]; then
-              cat $OUTPUTFILE $REPORTFILE | ssmtp $TO
+              cat $OUTPUTFILE $REPORTHEADER $REPORTFILE | ssmtp $TO
             else
               cat $OUTPUTFILE $MSG | ssmtp $TO
             fi
             #rm $OUTPUTFILE
+            #rm $REPORTHEADER
             #rm $REPORTFILE
             ;;
         "*")
@@ -569,7 +579,7 @@ check_file_status() {
                 "The SSL certificate for ${HOST} \"(CN: ${COMMONNAME})\" has expired!"
         fi
         if [ "${ALARM}" = "TRUE" ] && [ "${REPORT}" = "TRUE" ]; then
-            echo "The SSL Certificate for ${HOST} \"(CN: ${COMMONNAME})\" has expired!" >> $REPORTFILE
+            echo "The SSL Certificate for ${HOST} \"(CN: ${COMMONNAME})\" has expired!" >> $REPORTHEADER
         fi
 
         prints "${HOST}" "${PORT}" "Expired" "${CERTDATE}" "${CERTDIFF}" "${CERTISSUER}" "${COMMONNAME}" "${SERIAL}"
@@ -581,7 +591,7 @@ check_file_status() {
                 "The SSL certificate for ${HOST} \"(CN: ${COMMONNAME})\" will expire on ${CERTDATE}"
         fi
         if [ "${ALARM}" = "TRUE" ] && [ "${REPORT}" = "TRUE" ]; then
-            echo "The SSL Certificate for ${HOST} \"(CN: ${COMMONNAME})\" will expire on ${CERTDATE}" >> $REPORTFILE
+            echo "The SSL Certificate for ${HOST} \"(CN: ${COMMONNAME})\" will expire on ${CERTDATE}" >> $REPORTHEADER
         fi
         prints "${HOST}" "${PORT}" "Expiring" "${CERTDATE}" "${CERTDIFF}" "${CERTISSUER}" "${COMMONNAME}" "${SERIAL}"
         RETCODE_LOCAL=1
