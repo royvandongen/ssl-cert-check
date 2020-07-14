@@ -111,18 +111,15 @@ cleanup() {
     fi
 
     if [ -f "${MAILHEADER}" ]; then
-      #rm -f "${MAILHEADER}"
-      echo "Normally we delete a file now"
+      rm -f "${MAILHEADER}"
     fi
 
     if [ -f "${REPORTHEADER}" ]; then
-      #rm -f "${REPORTHEADER}"
-      echo "Normally we delete a file now"
+      rm -f "${REPORTHEADER}"
     fi
 
     if [ -f "${REPORTFILE}" ]; then
-      #rm -f "${REPORTFILE}"
-      echo "Normally we delete a file now"
+      rm -f "${REPORTFILE}"
     fi
 
 }
