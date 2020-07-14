@@ -143,6 +143,8 @@ send_mail() {
     SUBJECT="${3}"
     MSG="${4}"
 
+    cat $REPORTHEADER $REPORTFILE > $REPORTFILE
+
     case "${MAILMODE}" in
         "mail")
             if [ "${REPORT}" = "TRUE" ]; then
@@ -171,10 +173,12 @@ send_mail() {
               echo "No From Address set"
               echo "Subject: $SUBJECT" >> $OUTPUTFILE
               echo "To: $TO" >> $OUTPUTFILE
-            else
+              echo "" >> $OUTPUTFILE
+           else
               echo "From: $FROM" >> $OUTPUTFILE
               echo "Subject: $SUBJECT" >> $OUTPUTFILE
               echo "To: $TO" >> $OUTPUTFILE
+              echo "" >> $OUTPUTFILE
             fi
 
 
