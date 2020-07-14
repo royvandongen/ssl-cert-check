@@ -574,11 +574,11 @@ check_file_status() {
     CERTDIFF=$(date_diff "${NOWJULIAN}" "${CERTJULIAN}")
 
     if [ "${CERTDIFF}" -lt 0 ]; then
-        if [ "${ALARM}" = "TRUE" ] && [ "${REPORT}" = "FALSE"]; then
+        if [ "${ALARM}" = "TRUE" ] && [ "${REPORT}" = "FALSE" ]; then
             send_mail "${SENDER}" "${ADMIN}" "Certificate for ${HOST} \"(CN: ${COMMONNAME})\" has expired!" \
                 "The SSL certificate for ${HOST} \"(CN: ${COMMONNAME})\" has expired!"
         fi
-        if [ "${ALARM}" = "TRUE" ] && [ "${REPORT}" = "TRUE"]; then
+        if [ "${ALARM}" = "TRUE" ] && [ "${REPORT}" = "TRUE" ]; then
             echo "The SSL Certificate for ${HOST} \"(CN: ${COMMONNAME})\" has expired!" >> REPORTFILE
         fi
 
@@ -586,11 +586,11 @@ check_file_status() {
         RETCODE_LOCAL=2
 
     elif [ "${CERTDIFF}" -lt "${WARNDAYS}" ]; then
-        if [ "${ALARM}" = "TRUE" ] && [ "${REPORT}" = "FALSE"]; then
+        if [ "${ALARM}" = "TRUE" ] && [ "${REPORT}" = "FALSE" ]; then
             send_mail "${SENDER}" "${ADMIN}" "Certificate for ${HOST} \"(CN: ${COMMONNAME})\" will expire in ${CERTDIFF}-days or less" \
                 "The SSL certificate for ${HOST} \"(CN: ${COMMONNAME})\" will expire on ${CERTDATE}"
         fi
-        if [ "${ALARM}" = "TRUE" ] && [ "${REPORT}" = "TRUE"]; then
+        if [ "${ALARM}" = "TRUE" ] && [ "${REPORT}" = "TRUE" ]; then
             echo "The SSL Certificate for ${HOST} \"(CN: ${COMMONNAME})\" will expire on ${CERTDATE}" >> REPORTFILE
         fi
         prints "${HOST}" "${PORT}" "Expiring" "${CERTDATE}" "${CERTDIFF}" "${CERTISSUER}" "${COMMONNAME}" "${SERIAL}"
