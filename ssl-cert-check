@@ -167,7 +167,7 @@ send_mail() {
             ### Make a ssmtp compatible header if ssmtp is selected as sending mechanism
 
             if [ -z "$FROM" ]; then
-              echo "No From Address set"
+              echo "Notice: No From Address set, This is expected behaviour if you configured SSMTP the right way."
               echo "Subject: $SUBJECT" >> $MAILHEADER
               echo "To: $TO" >> $MAILHEADER
               echo "" >> $MAILHEADER
@@ -185,10 +185,6 @@ send_mail() {
               cat $MAILHEADER $MSG | ssmtp $TO
             fi
 
-            # Clean up temporary mail files.
-            rm $MAILHEADER
-            rm $REPORTHEADER
-            rm $REPORTFILE
             ;;
         "*")
             echo "ERROR: You enabled automated alerts, but the mail binary could not be found."
@@ -582,7 +578,7 @@ check_file_status() {
                 "The SSL certificate for ${HOST} \"(CN: ${COMMONNAME})\" has expired!"
         fi
         if [ "${ALARM}" = "TRUE" ] && [ "${REPORT}" = "TRUE" ]; then
-            echo "The SSL Certificate for ${HOST} \"(CN: ${COMMONNAME})\" has expired!" >> $REPORTHEADER
+            printf "The SSL Certificate for ${HOST} \"(CN: ${COMMONNAME})\" has expired!" >> $REPORTHEADER
         fi
 
         prints "${HOST}" "${PORT}" "Expired" "${CERTDATE}" "${CERTDIFF}" "${CERTISSUER}" "${COMMONNAME}" "${SERIAL}"
@@ -594,7 +590,7 @@ check_file_status() {
                 "The SSL certificate for ${HOST} \"(CN: ${COMMONNAME})\" will expire on ${CERTDATE}"
         fi
         if [ "${ALARM}" = "TRUE" ] && [ "${REPORT}" = "TRUE" ]; then
-            echo "The SSL Certificate for ${HOST} \"(CN: ${COMMONNAME})\" will expire on ${CERTDATE}" >> $REPORTHEADER
+            printf "The SSL Certificate for ${HOST} \"(CN: ${COMMONNAME})\" will expire on ${CERTDATE}" >> $REPORTHEADER
         fi
         prints "${HOST}" "${PORT}" "Expiring" "${CERTDATE}" "${CERTDIFF}" "${CERTISSUER}" "${COMMONNAME}" "${SERIAL}"
         RETCODE_LOCAL=1
