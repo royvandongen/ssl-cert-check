@@ -578,7 +578,7 @@ check_file_status() {
                 "The SSL certificate for ${HOST} \"(CN: ${COMMONNAME})\" has expired!"
         fi
         if [ "${ALARM}" = "TRUE" ] && [ "${REPORT}" = "TRUE" ]; then
-            printf "The SSL Certificate for ${HOST} \"(CN: ${COMMONNAME})\" has expired!" >> $REPORTHEADER
+            ${PRINTF} "The SSL Certificate for ${HOST} \"(CN: ${COMMONNAME})\" has expired!" >> $REPORTHEADER
         fi
 
         prints "${HOST}" "${PORT}" "Expired" "${CERTDATE}" "${CERTDIFF}" "${CERTISSUER}" "${COMMONNAME}" "${SERIAL}"
@@ -590,7 +590,7 @@ check_file_status() {
                 "The SSL certificate for ${HOST} \"(CN: ${COMMONNAME})\" will expire on ${CERTDATE}"
         fi
         if [ "${ALARM}" = "TRUE" ] && [ "${REPORT}" = "TRUE" ]; then
-            printf "The SSL Certificate for ${HOST} \"(CN: ${COMMONNAME})\" will expire on ${CERTDATE}" >> $REPORTHEADER
+            ${PRINTF} "The SSL Certificate for ${HOST} \"(CN: ${COMMONNAME})\" will expire on ${CERTDATE}" >> $REPORTHEADER
         fi
         prints "${HOST}" "${PORT}" "Expiring" "${CERTDATE}" "${CERTDIFF}" "${CERTISSUER}" "${COMMONNAME}" "${SERIAL}"
         RETCODE_LOCAL=1
