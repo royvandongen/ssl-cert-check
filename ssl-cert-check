@@ -130,6 +130,8 @@ create_mailheader() {
     FROM="${1}"
     TO="${2}"
 
+
+    echo "Creating outputfile with data ${FROM} and ${TO}"
     # Only set the Sender Address if this has been set
     if [ -z "$FROM" ]; then
       echo "No From address set"
@@ -754,6 +756,11 @@ elif [ "${CERTDIRECTORY}" != "" ] && ("${FIND}" -L "${CERTDIRECTORY}" -type f > 
 else
     usage
     exit 1
+fi
+
+### Send mail with report if enabled
+if [ "${REPORT} = "TRUE" ]; then
+  send_mail "${SENDER}" "${ADMIN}" "Certificate notificaitons")
 fi
 
 ### Exit with a success indicator
