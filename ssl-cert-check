@@ -36,7 +36,7 @@ CERTTYPE="pem"
 REPORT="FALSE"
 
 # Define temporary files for SSMTP Emailheader when SSMTP is used
-OUTPUTFILE=/tmp/outputfile
+MAILHEADER=/tmp/mailheader
 
 # Define a temporary reportheader file when reports are made
 REPORTHEADER=/tmp/reportheader
@@ -110,8 +110,8 @@ cleanup() {
       rm -f "${ERROR_TMP}"
     fi
 
-    if [ -f "${OUTPUTFILE}" ]; then
-      #rm -f "${OUTPUTFILE}"
+    if [ -f "${MAILHEADER}" ]; then
+      #rm -f "${MAILHEADER}"
       echo "Normally we delete a file now"
     fi
 
@@ -166,28 +166,32 @@ send_mail() {
             fi
             ;;
         "ssmtp")
+
             ### Make a ssmtp compatible header if ssmtp is selected as sending mechanism
+
             if [ -z "$FROM" ]; then
               echo "No From Address set"
-              echo "Subject: $SUBJECT" >> $OUTPUTFILE
-              echo "To: $TO" >> $OUTPUTFILE
-              echo "" >> $OUTPUTFILE
-           else
-              echo "From: $FROM" >> $OUTPUTFILE
-              echo "Subject: $SUBJECT" >> $OUTPUTFILE
-              echo "To: $TO" >> $OUTPUTFILE
-              echo "" >> $OUTPUTFILE
+              echo "Subject: $SUBJECT" >> $MAILHEADER
+              echo "To: $TO" >> $MAILHEADER
+              echo "" >> $MAILHEADER
+            else
+              echo "From: $FROM" >> $MAILHEADER
+              echo "Subject: $SUBJECT" >> $MAILHEADER
+              echo "To: $TO" >> $MAILHEADER
+              echo "" >> $MAILHEADER
             fi
 
 
             if [ "${REPORT}" = "TRUE" ]; then
-              cat $OUTPUTFILE $REPORTHEADER $REPORTFILE | ssmtp $TO
+              cat $MAILHEADER $REPORTHEADER $REPORTFILE | ssmtp $TO
             else
-              cat $OUTPUTFILE $MSG | ssmtp $TO
+              cat $MAILHEADER $MSG | ssmtp $TO
             fi
-            #rm $OUTPUTFILE
-            #rm $REPORTHEADER
-            #rm $REPORTFILE
+
+            # Clean up temporary mail files.
+            rm $MAILHEADER
+            rm $REPORTHEADER
+            rm $REPORTFILE
             ;;
         "*")
             echo "ERROR: You enabled automated alerts, but the mail binary could not be found."
