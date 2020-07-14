@@ -334,7 +334,7 @@ print_heading()
 
         elif [ "${QUIET}" != "TRUE" ] && [ "${NAGIOS}" != "TRUE" ] && [ "${VALIDATION}" != "TRUE" ] && [ "${REPORT}" = "TRUE" ]; then
             ${PRINTF} "\n%-47s %-12s %-12s %-4s\n" "Host" "Status" "Expires" "Days" >> $REPORTFILE
-            echo "----------------------------------------------- ------------ ------------ ----" >> $REPORTFILE
+            echo "----------------------------------------------- ------------------ --------------- ----" >> $REPORTFILE
 
         elif [ "${QUIET}" != "TRUE" ] && [ "${NAGIOS}" != "TRUE" ] && [ "${VALIDATION}" = "TRUE" ] && [ "${REPORT}" = "TRUE" ]; then
             ${PRINTF} "\n%-35s %-35s %-32s\n" "Host" "Common Name" "Serial #" >> $REPORTFILE
@@ -578,7 +578,7 @@ check_file_status() {
                 "The SSL certificate for ${HOST} \"(CN: ${COMMONNAME})\" has expired!"
         fi
         if [ "${ALARM}" = "TRUE" ] && [ "${REPORT}" = "TRUE" ]; then
-            ${PRINTF} "The SSL Certificate for ${HOST} \"(CN: ${COMMONNAME})\" has expired!" >> $REPORTHEADER
+            ${PRINTF} "The SSL Certificate for ${HOST} \"(CN: ${COMMONNAME})\" has expired!\n\n" >> $REPORTHEADER
         fi
 
         prints "${HOST}" "${PORT}" "Expired" "${CERTDATE}" "${CERTDIFF}" "${CERTISSUER}" "${COMMONNAME}" "${SERIAL}"
@@ -590,7 +590,7 @@ check_file_status() {
                 "The SSL certificate for ${HOST} \"(CN: ${COMMONNAME})\" will expire on ${CERTDATE}"
         fi
         if [ "${ALARM}" = "TRUE" ] && [ "${REPORT}" = "TRUE" ]; then
-            ${PRINTF} "The SSL Certificate for ${HOST} \"(CN: ${COMMONNAME})\" will expire on ${CERTDATE}" >> $REPORTHEADER
+            ${PRINTF} "The SSL Certificate for ${HOST} \"(CN: ${COMMONNAME})\" will expire on ${CERTDATE}\n\n" >> $REPORTHEADER
         fi
         prints "${HOST}" "${PORT}" "Expiring" "${CERTDATE}" "${CERTDIFF}" "${CERTISSUER}" "${COMMONNAME}" "${SERIAL}"
         RETCODE_LOCAL=1
@@ -753,7 +753,7 @@ else
 fi
 
 ### Send mail with report if enabled
-if [ "${REPORT}" = "TRUE" ]; then
+if [ "${REPORT}" = "TRUE" ] && [ "${ALERT}" = "TRUE" ]; then
   send_mail "${SENDER}" "${ADMIN}" "Certificate check has found an issue" "No Message"
 fi
 
