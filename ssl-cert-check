@@ -760,7 +760,7 @@ fi
 
 ### Send mail with report if enabled
 if [ "${REPORT} = "TRUE" ]; then
-  send_mail "${SENDER}" "${ADMIN}" "Certificate notificaitons")
+  send_mail "${SENDER}" "${ADMIN}" "Certificate notifications" "No Message"
 fi
 
 ### Exit with a success indicator
