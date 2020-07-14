@@ -179,6 +179,9 @@ send_mail() {
             fi
             ;;
         "ssmtp")
+            ### Make a ssmtp compatible header if ssmtp is selected as sending mechanism
+            create_mailheaders "${SENDER}" "${ADMIN}"
+
             if [ "${REPORT}" = "TRUE" ]; then
               cat $OUTPUTFILE $REPORTFILE | ssmtp $TO
             else
@@ -681,11 +684,6 @@ if [ "${ALARM}" = "TRUE" ] && [ ! -f "${MAIL}" ]; then
     echo "ERROR: You enabled automated alerts, but the mail binary could not be found."
     echo "FIX: Please modify the ${MAIL} variable in the program header."
     exit 1
-fi
-
-### Make a ssmtp compatible header if ssmtp is selected as sending mechanism
-if [ "${MAILMODE}" = "ssmtp" ]; then
-    create_mailheaders "${SENDER}" "${ADMIN}"
 fi
 
 # Send along the servername when TLS is used
